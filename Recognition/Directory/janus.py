@@ -47,9 +47,17 @@ def main():
             if r.status_code != 404:
                 print(result)
 
+        except requests.exceptions.ConnectionError as errc:
+            print(f"[!] Connection Error occurred: {errc}")  # DNS failure or refused connection
 
-        except requests.RequestException:
-            pass
+        except requests.exceptions.Timeout as errt:
+            print(f"[!] Timeout Error occurred: {errt}")  # Server took too long to respond
+
+        except requests.exceptions.TooManyRedirects as errr: # redirect loop
+            print(f"[!] Too Many Redirects occurred: {errr}")  
+
+        except requests.exceptions.RequestException as err:
+            print(f"[!] An unknown Request error occurred: {err}")
 
     # Execution Time
     begin = time.perf_counter()
