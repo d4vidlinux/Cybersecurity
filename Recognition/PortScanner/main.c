@@ -15,12 +15,13 @@ void PortScan(char *ip){
 
     int all_ports = 1;
     int sockfd;
+    char *protocols[2] = {"tcp", "udp"}; 
 
     struct servent *service;
 
     while(1){
 
-        service = getservbyport(htons(all_ports), "tcp");
+        service = getservbyport(htons(all_ports), *protocols);
         sockfd = socket(AF_INET, SOCK_STREAM, 0);
         memset(&target, 0, sizeof(target));
         
@@ -35,7 +36,7 @@ void PortScan(char *ip){
 
             if (service != NULL) {
                 printf("Port Opened: %d\t", all_ports);
-                printf("Service: %s\n", service->s_name);
+                printf("Service: %s - Protocol: %s\n", service->s_name, service->s_proto);
             } else {
                 printf("Port Opened: %d\t", all_ports);
                 printf("Service: Unknown\n");
