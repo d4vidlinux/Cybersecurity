@@ -14,14 +14,13 @@ struct sockaddr_in target;
 void PortScan(char *ip){
 
     int all_ports = 1;
-    int sockfd;
-    char *protocols[2] = {"tcp", "udp"}; 
+    int sockfd; 
 
     struct servent *service;
 
     while(1){
 
-        service = getservbyport(htons(all_ports), *protocols);
+        service = getservbyport(htons(all_ports), "tcp");
         sockfd = socket(AF_INET, SOCK_STREAM, 0);
         memset(&target, 0, sizeof(target));
         
