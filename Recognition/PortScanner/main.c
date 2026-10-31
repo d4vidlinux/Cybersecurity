@@ -10,20 +10,22 @@
 #include <stdbool.h>
 
 int port = 0;
+int proto_type = SOCK_STREAM;
+char *proto_name = "tcp";
 int sockfd; 
 int opt;
 
 struct sockaddr_in target;
+struct servent *service;
 
+bool Connection(char *ip, char *proto_name, int proto_type, int port){
 
-bool Connection(char *ip, int port){
-
-    struct servent *service;
+   
 
     if(port < 0 || port > 65535) exit(1);
 
-    service = getservbyport(htons(port), "tcp");
-    sockfd = socket(AF_INET, SOCK_STREAM, 0);
+    service = getservbyport(htons(port), proto_name);
+    sockfd = socket(AF_INET, proto_type, 0);
     memset(&target, 0, sizeof(target));
     
     target.sin_family = AF_INET;
@@ -31,14 +33,14 @@ bool Connection(char *ip, int port){
 
     inet_pton(AF_INET, ip, &target.sin_addr);
 
-    if ( connect(sockfd, (struct sockaddr *)&target, sizeof(target)) == 0){
+    if ( connect(sockfd, (struct sockaddr *) &target, sizeof(target)) == 0){
 
         if (service != NULL) {
             printf("Port Opened: %d\t", port);
             printf("Service: %s - Protocol: %s\n", service->s_name, service->s_proto);
         } else {
             printf("Port Opened: %d\t", port);
-            printf("Service: Unknown - Protocol: tcp\n");
+            printf("Service: Unknown - Protocol: %s\n", proto_name);
         }
 
         return true;
@@ -51,14 +53,15 @@ void PortScan(int argc, char **argv, char *ip){
     while(1){
 
 
-        while ((opt = getopt(argc, argv, "p:UT")) != -1){
+        while ((opt = getopt(argc, argv, "p:")) != -1){
         
             switch (opt){
             
                 case 'p':
                     port = atoi(optarg);
-                    if (!Connection(ip, port)) printf("Port Closed: %d\n", port);
+                    if (!Connection(ip, proto_name, proto_type, port)) printf("Port Closed: %d\n", port);
                     exit(1);
+
 
                 default:
                     break;
@@ -66,7 +69,8 @@ void PortScan(int argc, char **argv, char *ip){
 
         }
 
-    Connection(ip, port);
+    Connection(ip, proto_name, proto_type, port);
+    close(sockfd);
     port++;
     }
 }
