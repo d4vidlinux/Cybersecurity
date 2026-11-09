@@ -12,26 +12,30 @@
 
 #define BUFFER_SIZE 1024
 
+static char *help = "Usage: ./main <IP> [options]\n\nBasic options:\n-h\thelp screen\n-p\tspecifies a port to scan\n-s\tconfigure a start port. (Default: 0)\n-l\tconfigue a limit port. (Default: 65535)\n";
+
+char buffer[BUFFER_SIZE];
+char *proto_name = "tcp";
 int port = 0;
 int limit = 65535;
 int proto_type = SOCK_STREAM;
 int sockfd; 
 int opt;
-char buffer[BUFFER_SIZE];
-char *proto_name = "tcp";
-char *help = "Usage: ./main <IP> [options]\n\nBasic options:\n-h\thelp screen\n-p\tspecifies a port to scan\n-s\tconfigure a start port. (Default: 0)\n-l\tconfigue a limit port. (Default: 65535)\n";
-
-
 
 struct sockaddr_in target;
 struct servent *service;
 
+
+void print_help(void){
+    printf("%s", help);
+}
 
 bool Connection(char *ip, char *proto_name, int proto_type, int port){
 
    
 
     if(port < 0 || port > limit) exit(1);
+
 
     service = getservbyport(htons(port), proto_name);
     sockfd = socket(AF_INET, proto_type, 0);
@@ -80,11 +84,12 @@ void PortScan(int argc, char **argv, char *ip){
 
                 case 's':
                     port = atoi(optarg);
+                    break;
                 
                 
                 case 'l':
                     limit = atoi(optarg);
-
+                    break;
 
                 default:
                     break;
