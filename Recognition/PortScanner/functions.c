@@ -135,7 +135,7 @@ void PortScan(int argc, char **argv, char *ip){
     
     t = malloc(sizeof(pthread_t) * num_threads);
     if (t == NULL){
-        perror("Error allocating threads!");
+        perror("Error allocating threads!\n");
         exit(1);
     }
 
