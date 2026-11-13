@@ -1,19 +1,32 @@
 # Janus 
 
-This is a simple directory enumeration tool inspired by Gobuster and ffuf.
+Janus is a multithreaded directory enumeration tool written in Python. It performs concurrent HTTP requests against a target using a supplied wordlist to discover directories and files.
 
 The script uses the following syntax:
 
-`python3 janus.py URL WORDLIST`
+`python3 janus.py -u URL -w WORDLIST`
 
 or
 
-`./janus.py URL WORDLIST`
+`./janus.py --url URL --wordlist WORDLIST`
 
 It uses multiple threads for faster execution.
 
 ![Code print](Janus_test.png)
 
+It supports several command-line flags.
+
+![Help code print](janus_help.png)
+
+
+```
+Options
+
+-u, --url         Target URL
+-w, --wordlist    Wordlist path
+-t, --threads     Number of threads
+-T, --timeout     Request timeout
+```
 
 ## Features 
 
@@ -33,10 +46,8 @@ It uses multiple threads for faster execution.
     git clone https://github.com/d4vidlinux/janus.git
     cd janus
 ```
-2. Install Python:
-[Download Python](https://www.python.org/downloads)
 
-3. Create and activate a virtual environment:
+2. Create and activate a virtual environment:
 ```bash
     python3 -m venv venv
     source venv/bin/activate
@@ -46,14 +57,14 @@ It uses multiple threads for faster execution.
 ```bash
     chmod +x janus.py
 ```
-4. Install the requirements: 
+6. Install the requirements: 
 ```bash
     pip install -r requirements.txt
 ```
 
-5. Execute:
+7. Execute:
 ```bash
-    python janus.py http://example.com wordlist.txt
+    python janus.py -u http://example.com -w wordlist.txt
 ```
 
 
